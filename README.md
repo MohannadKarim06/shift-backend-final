@@ -4,7 +4,7 @@ FastAPI backend for the Shift AI platform. Built for Telfaz11.
 
 ## Stack
 - **Framework**: FastAPI (Python 3.12)
-- **Auth**: Firebase Auth + Custom Claims (role-based)
+- **Auth**: Firebase Auth + Custom Claims (role-based-access)
 - **Database**: Firestore
 - **AI**: Claude (Anthropic) — Sonnet 4 for agents, Haiku 4.5 for lightweight tasks
 - **Deployment**: Fly.io (Dubai region)
