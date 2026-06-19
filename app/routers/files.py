@@ -22,7 +22,7 @@ from typing import Optional
 
 from app.dependencies import get_current_user
 from app.services.file_generator import generate_pdf, generate_pptx, generate_html
-from app.main import limiter
+from app.limiter import limiter
 
 router = APIRouter()
 

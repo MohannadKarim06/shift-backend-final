@@ -4,7 +4,7 @@ from app.services.firebase import get_db
 from app.services.anthropic import run_agent
 from app.services.token_tracker import check_budget, record_usage
 from app.models.models import AgentChatRequest, AgentChatResponse
-from app.main import limiter
+from app.limiter import limiter
 
 router = APIRouter()
 
