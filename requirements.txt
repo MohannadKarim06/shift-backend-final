@@ -9,3 +9,4 @@ google-cloud-firestore==2.19.0
 slowapi==0.1.9
 reportlab==4.2.2
 python-pptx==1.0.2
+sentry-sdk[fastapi]==2.19.2

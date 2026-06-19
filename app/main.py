@@ -1,6 +1,5 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
@@ -10,26 +9,25 @@ from app.config import settings
 from app.services.firebase import init_firebase
 from app.routers import auth, workflows, agents, prompts, submissions, users, admin, files
 
-import sentry_sdk
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup
     init_firebase()
     print("✅ Firebase initialized")
 
-    # Sentry — only initialised when DSN is set
     if settings.sentry_dsn:
-        sentry_sdk.init(
-            dsn=settings.sentry_dsn,
-            traces_sample_rate=0.2,  # 20% of requests for performance monitoring
-            environment=settings.app_env,
-        )
-        print("✅ Sentry initialized")
+        try:
+            import sentry_sdk
+            sentry_sdk.init(
+                dsn=settings.sentry_dsn,
+                traces_sample_rate=0.2,
+                environment=settings.app_env,
+            )
+            print("✅ Sentry initialized")
+        except ImportError:
+            print("⚠️  sentry-sdk not installed, skipping Sentry")
 
     yield
-
     print("👋 Shutting down")
 
 
@@ -40,7 +38,7 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# ── Rate limiting middleware ───────────────────────────────────────────────────
+# ── Rate limiting ─────────────────────────────────────────────────────────────
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_middleware(SlowAPIMiddleware)
